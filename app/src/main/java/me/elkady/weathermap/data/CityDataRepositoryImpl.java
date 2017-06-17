@@ -12,6 +12,7 @@ import java.util.List;
 import me.elkady.weathermap.BuildConfig;
 import me.elkady.weathermap.models.City;
 import me.elkady.weathermap.models.CityDetails;
+import me.elkady.weathermap.models.UnitSystem;
 
 /**
  * Created by mak on 6/17/17.
@@ -19,9 +20,9 @@ import me.elkady.weathermap.models.CityDetails;
 
 public class CityDataRepositoryImpl implements CityDataRepository {
     @Override
-    public void loadCityDetails(City city, final OnDetailsLoaded onDetailsLoaded) {
+    public void loadCityDetails(City city, UnitSystem unitSystem, final OnDetailsLoaded onDetailsLoaded) {
         try {
-            URL u = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + city.getLat() + "&lon=" + city.getLng() + "&appid=" + BuildConfig.OWM_API_KEY + "&units=metric");
+            URL u = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + city.getLat() + "&lon=" + city.getLng() + "&appid=" + BuildConfig.OWM_API_KEY + "&units=" + unitSystem.getName());
             HttpConnectionUtil.processRequest(u, new HttpConnectionUtil.OnDataReceived() {
                 @Override
                 public void onDataReceived(String data) {
@@ -43,9 +44,9 @@ public class CityDataRepositoryImpl implements CityDataRepository {
     }
 
     @Override
-    public void loadCityForecast(City city, final OnForecastLoaded onForecastLoaded) {
+    public void loadCityForecast(City city, UnitSystem unitSystem, final OnForecastLoaded onForecastLoaded) {
         try {
-            URL u = new URL("http://api.openweathermap.org/data/2.5/forecast?lat=" + city.getLat() + "&lon=" + city.getLng() + "&appid=" + BuildConfig.OWM_API_KEY + "&units=metric");
+            URL u = new URL("http://api.openweathermap.org/data/2.5/forecast?lat=" + city.getLat() + "&lon=" + city.getLng() + "&appid=" + BuildConfig.OWM_API_KEY + "&units=" + unitSystem.getName());
             HttpConnectionUtil.processRequest(u, new HttpConnectionUtil.OnDataReceived() {
                 @Override
                 public void onDataReceived(String data) {

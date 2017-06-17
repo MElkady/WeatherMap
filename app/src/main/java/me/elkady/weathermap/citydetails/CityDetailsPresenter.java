@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.elkady.weathermap.R;
 import me.elkady.weathermap.data.CityDataRepository;
+import me.elkady.weathermap.data.SettingsRepository;
 import me.elkady.weathermap.models.City;
 import me.elkady.weathermap.models.CityDetails;
 
@@ -14,9 +15,11 @@ import me.elkady.weathermap.models.CityDetails;
 public class CityDetailsPresenter implements CityDetailsContract.Presenter {
     private CityDetailsContract.View mView;
     private CityDataRepository mCityDataRepository;
+    private SettingsRepository mSettingsRepository;
 
-    public CityDetailsPresenter(CityDataRepository cityDataRepository) {
+    public CityDetailsPresenter(CityDataRepository cityDataRepository, SettingsRepository settingsRepository) {
         this.mCityDataRepository = cityDataRepository;
+        this.mSettingsRepository = settingsRepository;
     }
 
     @Override
@@ -30,11 +33,18 @@ public class CityDetailsPresenter implements CityDetailsContract.Presenter {
     }
 
     @Override
+    public void loadUnitSystem() {
+        if(mView != null) {
+            mView.setUnitSystem(mSettingsRepository.getUnitSystem());
+        }
+    }
+
+    @Override
     public void loadCityDetails(City city) {
         if(mView != null) {
             mView.showLoading();
         }
-        mCityDataRepository.loadCityDetails(city, new CityDataRepository.OnDetailsLoaded() {
+        mCityDataRepository.loadCityDetails(city, mSettingsRepository.getUnitSystem(), new CityDataRepository.OnDetailsLoaded() {
             @Override
             public void onDetailsLoaded(CityDetails cityDetails) {
                 if(mView != null) {
@@ -55,7 +65,7 @@ public class CityDetailsPresenter implements CityDetailsContract.Presenter {
 
     @Override
     public void loadForecast(City city) {
-        mCityDataRepository.loadCityForecast(city, new CityDataRepository.OnForecastLoaded() {
+        mCityDataRepository.loadCityForecast(city, mSettingsRepository.getUnitSystem(), new CityDataRepository.OnForecastLoaded() {
             @Override
             public void onForecastLoaded(List<CityDetails> cityDetails) {
                 if(mView != null) {

@@ -14,6 +14,7 @@ import me.elkady.weathermap.citieslist.CitiesListFragment;
 import me.elkady.weathermap.citydetails.CityDetailsFragment;
 import me.elkady.weathermap.help.HelpFragment;
 import me.elkady.weathermap.models.City;
+import me.elkady.weathermap.settings.SettingsFragment;
 
 public class HomeActivity extends AppCompatActivity implements HomeInterface {
     private boolean mDualPane = false;
@@ -73,6 +74,13 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
                 getSupportFragmentManager().popBackStack();
             }
             return  true;
+        } else if (item.getItemId() == R.id.item_settings) {
+            Fragment fragment = SettingsFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(mDualPane? R.id.home_details_fragment : R.id.home_list_fragment, fragment)
+                    .addToBackStack(null)
+                    .commit();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

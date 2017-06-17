@@ -77,6 +77,11 @@ public class BookmarksRepositoryImpl implements BookmarksRepository {
     }
 
     @Override
+    public void clear() {
+        getDB().delete(DBContract.BookmarkedCityEntry.TABLE_NAME, null, null);
+    }
+
+    @Override
     public void onDestroy() {
         if(mSqLiteDatabase != null) {
             mSqLiteDatabase.close();

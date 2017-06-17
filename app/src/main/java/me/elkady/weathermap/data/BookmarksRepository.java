@@ -12,6 +12,7 @@ public interface BookmarksRepository {
     void loadBookmarkedCities(OnBookmarkedCitiesLoaded onBookmarkedCitiesLoaded);
     void bookmarkCity(City city);
     void removeBookmarkCity(City city);
+    void clear();
     void onDestroy();
     City getCity(double lat, double lng);
 

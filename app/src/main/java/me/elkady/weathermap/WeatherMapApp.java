@@ -7,6 +7,8 @@ import me.elkady.weathermap.data.BookmarksRepository;
 import me.elkady.weathermap.data.BookmarksRepositoryImpl;
 import me.elkady.weathermap.data.CityDataRepository;
 import me.elkady.weathermap.data.CityDataRepositoryImpl;
+import me.elkady.weathermap.data.SettingsRepository;
+import me.elkady.weathermap.data.SettingsRepositoryImpl;
 
 /**
  * Created by mak on 6/17/17.
@@ -31,5 +33,8 @@ public class WeatherMapApp extends Application {
     }
     public static CityDataRepository getCityDataRepository(){
         return new CityDataRepositoryImpl();
+    }
+    public static SettingsRepository getSettingsRepository(){
+        return new SettingsRepositoryImpl();
     }
 }

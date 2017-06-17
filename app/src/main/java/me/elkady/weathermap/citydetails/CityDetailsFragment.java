@@ -23,6 +23,7 @@ import me.elkady.weathermap.R;
 import me.elkady.weathermap.WeatherMapApp;
 import me.elkady.weathermap.models.City;
 import me.elkady.weathermap.models.CityDetails;
+import me.elkady.weathermap.models.UnitSystem;
 
 
 public class CityDetailsFragment extends Fragment implements CityDetailsContract.View {
@@ -32,6 +33,7 @@ public class CityDetailsFragment extends Fragment implements CityDetailsContract
     private City mCity;
     private CityDetails mTodayWeather;
     private List<CityDetails> mForecast;
+    private UnitSystem mUnitSystem;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -55,13 +57,14 @@ public class CityDetailsFragment extends Fragment implements CityDetailsContract
             mCity = (City) getArguments().getSerializable(ARG_CITY);
         }
 
-        mPresenter = new CityDetailsPresenter(WeatherMapApp.getCityDataRepository());
+        mPresenter = new CityDetailsPresenter(WeatherMapApp.getCityDataRepository(), WeatherMapApp.getSettingsRepository());
         mPresenter.attachView(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.loadUnitSystem();
         mPresenter.loadCityDetails(mCity);
         mPresenter.loadForecast(mCity);
     }
@@ -106,19 +109,31 @@ public class CityDetailsFragment extends Fragment implements CityDetailsContract
         ImageView iv = (ImageView) getView().findViewById(R.id.backdrop);
         iv.setVisibility(View.VISIBLE);
 
-        if(cityDetails.getTemp() > 35) {
-            iv.setImageResource(R.drawable.hot);
-        } else if(cityDetails.getTemp() > 25) {
-            iv.setImageResource(R.drawable.warm);
-        } else if(cityDetails.getTemp() > 10) {
-            iv.setImageResource(R.drawable.good);
+        if(mUnitSystem == UnitSystem.METRIC) {
+            if (cityDetails.getTemp() > 35) {
+                iv.setImageResource(R.drawable.hot);
+            } else if (cityDetails.getTemp() > 25) {
+                iv.setImageResource(R.drawable.warm);
+            } else if (cityDetails.getTemp() > 10) {
+                iv.setImageResource(R.drawable.good);
+            } else {
+                iv.setImageResource(R.drawable.cold);
+            }
         } else {
-            iv.setImageResource(R.drawable.cold);
+            if(cityDetails.getTemp() > 95) {
+                iv.setImageResource(R.drawable.hot);
+            } else if(cityDetails.getTemp() > 77) {
+                iv.setImageResource(R.drawable.warm);
+            } else if(cityDetails.getTemp() > 50) {
+                iv.setImageResource(R.drawable.good);
+            } else {
+                iv.setImageResource(R.drawable.cold);
+            }
         }
 
-        ((TextView) getView().findViewById(R.id.tv_temperature)).setText(getString(R.string.temperature_is, cityDetails.getTemp()));
-        ((TextView) getView().findViewById(R.id.tv_min_temperature)).setText(getString(R.string.min_temperature_is, cityDetails.getMinTemp()));
-        ((TextView) getView().findViewById(R.id.tv_max_temperature)).setText(getString(R.string.max_temperature_is, cityDetails.getMaxTemp()));
+        ((TextView) getView().findViewById(R.id.tv_temperature)).setText(getString(R.string.temperature_is, cityDetails.getTemp(), mUnitSystem.getTemperatureSymbol()));
+        ((TextView) getView().findViewById(R.id.tv_min_temperature)).setText(getString(R.string.min_temperature_is, cityDetails.getMinTemp(), mUnitSystem.getTemperatureSymbol()));
+        ((TextView) getView().findViewById(R.id.tv_max_temperature)).setText(getString(R.string.max_temperature_is, cityDetails.getMaxTemp(), mUnitSystem.getTemperatureSymbol()));
         ((TextView) getView().findViewById(R.id.tv_humidity)).setText(getString(R.string.humidity_is, cityDetails.getHumidity()));
         ((TextView) getView().findViewById(R.id.tv_rain)).setText(getString(R.string.rain_is, cityDetails.getRainChance()));
         ((TextView) getView().findViewById(R.id.tv_wind_direction)).setText(getString(R.string.wind_direction_is, cityDetails.getWindDeg()));
@@ -144,6 +159,11 @@ public class CityDetailsFragment extends Fragment implements CityDetailsContract
         getView().findViewById(R.id.progress_bar).setVisibility(View.GONE);
     }
 
+    @Override
+    public void setUnitSystem(UnitSystem unitSystem) {
+        mUnitSystem = unitSystem;
+    }
+
     class ForecaseViewHolder extends RecyclerView.ViewHolder {
         public ForecaseViewHolder(View itemView) {
             super(itemView);
@@ -151,9 +171,9 @@ public class CityDetailsFragment extends Fragment implements CityDetailsContract
 
         void bindView(CityDetails cityDetails) {
             ((TextView) itemView.findViewById(R.id.tv_date)).setText(sdf.format(cityDetails.getDate()));
-            ((TextView) itemView.findViewById(R.id.tv_temperature)).setText(getString(R.string.temperature_is, cityDetails.getTemp()));
-            ((TextView) itemView.findViewById(R.id.tv_min_temperature)).setText(getString(R.string.min_temperature_is, cityDetails.getMinTemp()));
-            ((TextView) itemView.findViewById(R.id.tv_max_temperature)).setText(getString(R.string.max_temperature_is, cityDetails.getMaxTemp()));
+            ((TextView) itemView.findViewById(R.id.tv_temperature)).setText(getString(R.string.temperature_is, cityDetails.getTemp(), mUnitSystem.getTemperatureSymbol()));
+            ((TextView) itemView.findViewById(R.id.tv_min_temperature)).setText(getString(R.string.min_temperature_is, cityDetails.getMinTemp(), mUnitSystem.getTemperatureSymbol()));
+            ((TextView) itemView.findViewById(R.id.tv_max_temperature)).setText(getString(R.string.max_temperature_is, cityDetails.getMaxTemp(), mUnitSystem.getTemperatureSymbol()));
             ((TextView) itemView.findViewById(R.id.tv_humidity)).setText(getString(R.string.humidity_is, cityDetails.getHumidity()));
             ((TextView) itemView.findViewById(R.id.tv_rain)).setText(getString(R.string.rain_is, cityDetails.getRainChance()));
             ((TextView) itemView.findViewById(R.id.tv_wind_direction)).setText(getString(R.string.wind_direction_is, cityDetails.getWindDeg()));

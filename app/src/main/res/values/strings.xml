@@ -16,9 +16,9 @@
     <string name="cancel">Cancel</string>
     <string name="today">Today</string>
 
-    <string name="temperature_is">Temperature: %1$.0f°</string>
-    <string name="min_temperature_is">Min Temperature: %1$.0f°</string>
-    <string name="max_temperature_is">Max Temperature: %1$.0f°</string>
+    <string name="temperature_is">Temperature: %1$.0f°%2$s</string>
+    <string name="min_temperature_is">Min Temperature: %1$.0f°%2$s</string>
+    <string name="max_temperature_is">Max Temperature: %1$.0f°%2$s</string>
     <string name="humidity_is">Humidity: %1$.0f%%</string>
     <string name="rain_is">Rain Chance: %1$.0f%%</string>
     <string name="wind_direction_is">Wind degree: %1$.2f°</string>
@@ -26,4 +26,9 @@
 
     <string name="lorem_ipsum">\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce mollis ipsum et bibendum porttitor. Donec accumsan arcu tristique tortor pellentesque, sed tempus lorem mollis. Sed id magna sed neque dictum dictum vitae ut leo. Mauris ultricies, dolor nec vehicula maximus, velit diam fringilla nisl, vitae eleifend nibh velit vitae arcu. Integer non pharetra tortor. Nam vehicula mi non est porta consequat in id elit. Nam vitae cursus enim. Nunc efficitur, mi eu consectetur congue, odio sapien pharetra ante, sit amet tincidunt ligula nibh pellentesque neque. Etiam ullamcorper, risus ac dignissim pretium, odio diam vehicula justo, quis accumsan nunc lorem ut justo. Etiam eleifend, nibh in porta porta, urna metus iaculis nisi, vitae sodales est purus eget neque.</string>
     <string name="forecast">Forecast</string>
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
+    <string name="unit_system">Unit system</string>
+    <string name="reset_bookmarks">Reset bookmarks</string>
+    <string name="all_bookmarks_removed">All bookmarks are removed</string>
 </resources>
