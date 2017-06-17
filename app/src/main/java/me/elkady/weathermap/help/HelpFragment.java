@@ -28,7 +28,6 @@ public class HelpFragment extends Fragment implements HelpContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
 
         mPresenter = new HelpPresenter();
         mPresenter.attachView(this);

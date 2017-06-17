@@ -1,5 +1,7 @@
 package me.elkady.weathermap.citydetails;
 
+import java.util.List;
+
 import me.elkady.weathermap.R;
 import me.elkady.weathermap.data.CityDataRepository;
 import me.elkady.weathermap.models.City;
@@ -29,11 +31,35 @@ public class CityDetailsPresenter implements CityDetailsContract.Presenter {
 
     @Override
     public void loadCityDetails(City city) {
+        if(mView != null) {
+            mView.showLoading();
+        }
         mCityDataRepository.loadCityDetails(city, new CityDataRepository.OnDetailsLoaded() {
             @Override
             public void onDetailsLoaded(CityDetails cityDetails) {
                 if(mView != null) {
+                    mView.hideLoading();
                     mView.displayCityDetails(cityDetails);
+                }
+            }
+
+            @Override
+            public void onError() {
+                if(mView != null) {
+                    mView.hideLoading();
+                    mView.showErrorMessage(R.string.cant_load_data);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void loadForecast(City city) {
+        mCityDataRepository.loadCityForecast(city, new CityDataRepository.OnForecastLoaded() {
+            @Override
+            public void onForecastLoaded(List<CityDetails> cityDetails) {
+                if(mView != null) {
+                    mView.displayForecast(cityDetails);
                 }
             }
 

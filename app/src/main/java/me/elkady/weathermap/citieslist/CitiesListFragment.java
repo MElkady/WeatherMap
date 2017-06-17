@@ -46,7 +46,6 @@ public class CitiesListFragment extends Fragment implements CitiesListContract.V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         mPresenter = new CitiesListPresenter(WeatherMapApp.getBookmarksRepository());

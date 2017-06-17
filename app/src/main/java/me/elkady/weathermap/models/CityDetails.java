@@ -3,11 +3,14 @@ package me.elkady.weathermap.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by mak on 6/17/17.
  */
 
 public class CityDetails {
+    private Date date;
     private double temp;
     private double minTemp;
     private double maxTemp;
@@ -24,6 +27,8 @@ public class CityDetails {
     }
 
     public CityDetails(JSONObject jsonObject) throws JSONException {
+        this.date = new Date(jsonObject.getLong("dt") * 1000);
+
         JSONObject main = jsonObject.getJSONObject("main");
         temp = main.getDouble("temp");
         minTemp = main.getDouble("temp_min");
@@ -35,6 +40,14 @@ public class CityDetails {
         windDeg = wind.getDouble("deg");
 
         rainChance = jsonObject.getJSONObject("clouds").getDouble("all");
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public double getTemp() {

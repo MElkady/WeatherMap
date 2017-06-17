@@ -1,5 +1,7 @@
 package me.elkady.weathermap.data;
 
+import java.util.List;
+
 import me.elkady.weathermap.models.City;
 import me.elkady.weathermap.models.CityDetails;
 
@@ -9,10 +11,16 @@ import me.elkady.weathermap.models.CityDetails;
 
 public interface CityDataRepository {
     void loadCityDetails(City city, OnDetailsLoaded onDetailsLoaded);
+    void loadCityForecast(City city, OnForecastLoaded onForecastLoaded);
 
 
-    public interface OnDetailsLoaded {
+    interface OnDetailsLoaded {
         void onDetailsLoaded(CityDetails cityDetails);
+        void onError();
+    }
+
+    interface OnForecastLoaded {
+        void onForecastLoaded(List<CityDetails> cityDetails);
         void onError();
     }
 }
