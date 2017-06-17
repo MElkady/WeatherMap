@@ -3,6 +3,8 @@ package me.elkady.weathermap.help;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,8 @@ import android.webkit.WebViewClient;
 
 import me.elkady.weathermap.R;
 
-public class HelpFragment extends Fragment {
-
+public class HelpFragment extends Fragment implements HelpContract.View {
+    private HelpContract.Presenter mPresenter;
 
     public HelpFragment() {
     }
@@ -26,8 +28,16 @@ public class HelpFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
+
+        mPresenter = new HelpPresenter();
+        mPresenter.attachView(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     @Override
@@ -41,9 +51,14 @@ public class HelpFragment extends Fragment {
                 return true;
             }
         });
-        webView.loadUrl("https://elkady.me");
+        webView.loadUrl("file:///android_asset/index.html");
 
         return v;
     }
 
+    @Override
+    public void showErrorMessage(@StringRes int error) {
+        Snackbar.make(getView(), error, Snackbar.LENGTH_LONG)
+                .show();
+    }
 }

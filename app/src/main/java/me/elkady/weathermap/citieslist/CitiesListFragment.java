@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -78,6 +79,19 @@ public class CitiesListFragment extends Fragment implements CitiesListContract.V
     public void onResume() {
         super.onResume();
         refresh();
+
+        FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.fab);
+        if(mListener != null && mListener.shouldShowAddCityButton()) {
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.searchForCity();
+                }
+            });
+        } else {
+            fab.setVisibility(View.GONE);
+        }
     }
 
     @Override
