@@ -10,5 +10,4 @@ public interface HomeInterface {
     void switchToSearchScreen();
     void switchToDetailsScreen(City city);
     void onBookmarksUpdated();
-    boolean shouldShowAddCityButton();
 }

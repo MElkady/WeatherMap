@@ -1,9 +1,9 @@
 package me.elkady.weathermap;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,19 +27,28 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        View detailsFrame = findViewById(R.id.home_details_fragment);
+        View detailsFrame = findViewById(R.id.home_list_fragment);
         mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
+
         Fragment citiesListFragment = getSupportFragmentManager().findFragmentById(R.id.home_list_fragment);
-        if(citiesListFragment == null) {
+        if(mDualPane && citiesListFragment == null) {
             citiesListFragment = CitiesListFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.home_list_fragment, citiesListFragment).commit();
         }
 
-        Fragment detailsFragment = getSupportFragmentManager().findFragmentById(R.id.home_details_fragment);
-        if(mDualPane && detailsFragment == null) {
-            detailsFragment = AddCityFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().add(R.id.home_details_fragment, detailsFragment).commit();
+        if(mDualPane) {
+            Fragment detailsFragment = getSupportFragmentManager().findFragmentById(R.id.home_details_fragment);
+            if (detailsFragment != null && detailsFragment instanceof CitiesListFragment) {
+                detailsFragment = AddCityFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().add(R.id.home_details_fragment, detailsFragment).commit();
+            }
+        } else {
+            Fragment detailsFragment = getSupportFragmentManager().findFragmentById(R.id.home_details_fragment);
+            if (detailsFragment == null) {
+                detailsFragment = CitiesListFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().add(R.id.home_details_fragment, detailsFragment).commit();
+            }
         }
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -52,6 +61,11 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
                 }
             }
         });
+        if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     @Override
@@ -65,7 +79,7 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
         if(item.getItemId() == R.id.item_help) {
             Fragment fragment = HelpFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
-                    .replace(mDualPane? R.id.home_details_fragment : R.id.home_list_fragment, fragment)
+                    .replace(R.id.home_details_fragment, fragment)
                     .addToBackStack(null)
                     .commit();
             return true;
@@ -77,7 +91,7 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
         } else if (item.getItemId() == R.id.item_settings) {
             Fragment fragment = SettingsFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
-                    .replace(mDualPane? R.id.home_details_fragment : R.id.home_list_fragment, fragment)
+                    .replace(R.id.home_details_fragment, fragment)
                     .addToBackStack(null)
                     .commit();
             return true;
@@ -89,7 +103,7 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
     public void switchToSearchScreen() {
         Fragment fragment = AddCityFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
-                .replace(mDualPane? R.id.home_details_fragment : R.id.home_list_fragment, fragment)
+                .replace(R.id.home_details_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -98,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
     public void switchToDetailsScreen(City city) {
         Fragment fragment = CityDetailsFragment.newInstance(city);
         getSupportFragmentManager().beginTransaction()
-                .replace(mDualPane? R.id.home_details_fragment : R.id.home_list_fragment, fragment)
+                .replace(R.id.home_details_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -114,10 +128,5 @@ public class HomeActivity extends AppCompatActivity implements HomeInterface {
         if(detailsFragment != null && detailsFragment instanceof AddCityFragment) {
             ((AddCityFragment) detailsFragment).refresh();
         }
-    }
-
-    @Override
-    public boolean shouldShowAddCityButton() {
-        return !mDualPane;
     }
 }

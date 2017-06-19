@@ -80,7 +80,7 @@ public class CitiesListFragment extends Fragment implements CitiesListContract.V
         refresh();
 
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.fab);
-        if(mListener != null && mListener.shouldShowAddCityButton()) {
+        if(mListener != null) {
             fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,7 +101,7 @@ public class CitiesListFragment extends Fragment implements CitiesListContract.V
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(mListener != null && mListener.shouldShowAddCityButton()) {
+        if(mListener != null) {
             inflater.inflate(R.menu.menu_cities_list, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
