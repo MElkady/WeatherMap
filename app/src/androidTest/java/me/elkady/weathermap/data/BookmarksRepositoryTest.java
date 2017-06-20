@@ -30,12 +30,12 @@ public class BookmarksRepositoryTest {
     public void setUp() throws Exception {
         mBookmarksRepository = new BookmarksRepositoryImpl();
         mBookmarksRepository.clear();
-        mBookmarksRepository.bookmarkCity(TEST_CITY);
     }
 
     @Test
-    public void loadBookmarkedCities() throws Exception {
+    public void testAddLoad() throws Exception {
         final CountDownLatch signal = new CountDownLatch(1);
+        mBookmarksRepository.bookmarkCity(TEST_CITY);
         mBookmarksRepository.loadBookmarkedCities(new BookmarksRepository.OnBookmarkedCitiesLoaded() {
             @Override
             public void onBookmarkedCitiesLoaded(List<City> cities) {
